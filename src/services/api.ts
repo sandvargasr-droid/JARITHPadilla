@@ -11,6 +11,7 @@ import {
   RatingReview,
   AppNotification,
 } from '../types.js';
+import { staticApi } from './staticApi.js';
 
 let currentUserId = 'user_inf_1';
 
@@ -45,7 +46,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   return res.json();
 }
 
-export const api = {
+const httpApi = {
   setCurrentUserId,
   getCurrentUserId,
 
@@ -337,3 +338,7 @@ export const api = {
     });
   },
 };
+
+export const api: typeof httpApi = import.meta.env.MODE === 'pages'
+  ? staticApi
+  : httpApi;

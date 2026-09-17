@@ -27,7 +27,7 @@ import {
   initialNotifications,
 } from './mockData.js';
 
-class InMemoryDatabase {
+export class InMemoryDatabase {
   private users: User[] = [];
   private influencers: InfluencerProfile[] = [];
   private businesses: BusinessProfile[] = [];
