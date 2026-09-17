@@ -4,13 +4,20 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
+  const projectRoot = import.meta.dirname;
+
   return {
+    root: path.resolve(projectRoot, 'src'),
     base: '/JARITHPadilla/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(import.meta.dirname, '.'),
+        '@': projectRoot,
       },
+    },
+    build: {
+      outDir: path.resolve(projectRoot, 'dist'),
+      emptyOutDir: true,
     },
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
