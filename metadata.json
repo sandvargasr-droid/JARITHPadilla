@@ -1,0 +1,8 @@
+{
+  "name": "Remix InfluConnect",
+  "description": "Marketplace que conecta influencers y marcas para campañas con escrow, acuerdos, mensajería y calificaciones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
