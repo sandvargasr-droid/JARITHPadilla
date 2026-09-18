@@ -5,7 +5,6 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  DollarSign,
   MessageSquare,
   Sparkles,
   ArrowRight,
@@ -14,6 +13,7 @@ import {
   Building2,
 } from 'lucide-react';
 import { ApplicationOrInvitation, UserRole } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   role: UserRole;
@@ -204,10 +204,7 @@ export const ApplicationsView: React.FC<Props> = ({
                     <span className="text-[10px] text-slate-400 block font-medium">
                       Presupuesto Acordado
                     </span>
-                    <span className="text-xl font-extrabold text-slate-900">
-                      ${app.agreedBudget}{' '}
-                      <span className="text-xs font-normal text-slate-400">USD</span>
-                    </span>
+                    <span className="text-xl font-extrabold text-slate-900">{formatCurrency(app.agreedBudget)}</span>
                   </div>
 
                   {canRespond ? (

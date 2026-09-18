@@ -5,7 +5,6 @@ import {
   Users,
   Building2,
   RefreshCw,
-  BookOpen,
   ChevronDown,
   Check,
   ExternalLink,
@@ -25,7 +24,6 @@ interface NavbarProps {
   onNotificationClick: (notif: AppNotification) => void;
   onMarkAllRead: () => void;
   onResetDemo: () => void;
-  onOpenDocs: () => void;
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
@@ -39,7 +37,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNotificationClick,
   onMarkAllRead,
   onResetDemo,
-  onOpenDocs,
   activeTab,
   onTabChange,
 }) => {
@@ -118,16 +115,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right Action Tools */}
           <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* Documentation Button */}
-            <button
-              onClick={onOpenDocs}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-violet-700 hover:bg-violet-50/70 border border-slate-200/80 transition-colors"
-              title="Ver especificación funcional oficial"
-            >
-              <BookOpen className="w-4 h-4 text-violet-600" />
-              <span className="hidden sm:inline">Especificación</span>
-            </button>
-
             {/* Reset Demo Button */}
             <button
               onClick={onResetDemo}

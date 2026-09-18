@@ -3,7 +3,7 @@ import {
   Star,
   MapPin,
   Globe,
-  DollarSign,
+  Coins,
   Video,
   Heart,
   Eye,
@@ -20,6 +20,7 @@ import {
   Camera,
 } from 'lucide-react';
 import { InfluencerProfile, VideoPortfolioItem, CoverageType } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 const AVATAR_PRESETS = [
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
@@ -447,10 +448,10 @@ export const InfluencerProfileView: React.FC<Props> = ({ profile, onSave, readOn
 
           {/* Rates editor */}
           <div className="pt-2">
-            <h3 className="font-bold text-slate-800 text-xs mb-2">Tarifas por Tipo de Contenido (USD)</h3>
+            <h3 className="font-bold text-slate-800 text-xs mb-2">Tarifas por Tipo de Contenido (Bs)</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
-                <label className="block font-medium text-slate-500 mb-1">Story ($)</label>
+                <label className="block font-medium text-slate-500 mb-1">Story (Bs)</label>
                 <input
                   type="number"
                   value={formData.rates.story}
@@ -464,7 +465,7 @@ export const InfluencerProfileView: React.FC<Props> = ({ profile, onSave, readOn
                 />
               </div>
               <div>
-                <label className="block font-medium text-slate-500 mb-1">Reel / TikTok ($)</label>
+                <label className="block font-medium text-slate-500 mb-1">Reel / TikTok (Bs)</label>
                 <input
                   type="number"
                   value={formData.rates.reel}
@@ -478,7 +479,7 @@ export const InfluencerProfileView: React.FC<Props> = ({ profile, onSave, readOn
                 />
               </div>
               <div>
-                <label className="block font-medium text-slate-500 mb-1">Post en Feed ($)</label>
+                <label className="block font-medium text-slate-500 mb-1">Post en Feed (Bs)</label>
                 <input
                   type="number"
                   value={formData.rates.post}
@@ -492,7 +493,7 @@ export const InfluencerProfileView: React.FC<Props> = ({ profile, onSave, readOn
                 />
               </div>
               <div>
-                <label className="block font-medium text-slate-500 mb-1">Video Dedicado ($)</label>
+                <label className="block font-medium text-slate-500 mb-1">Video Dedicado (Bs)</label>
                 <input
                   type="number"
                   value={formData.rates.videoDedicado}
@@ -609,34 +610,34 @@ export const InfluencerProfileView: React.FC<Props> = ({ profile, onSave, readOn
         <div className="bg-white rounded-2xl p-6 border border-violet-100 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-slate-900 text-sm font-display flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-600" />
+              <Coins className="w-4 h-4 text-emerald-600" />
               Tarifario por Formato de Contenido
             </h3>
-            <span className="text-xs text-slate-400 font-medium">Precios base en USD</span>
+            <span className="text-xs text-slate-400 font-medium">Precios base en bolivianos</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="p-3.5 rounded-xl bg-violet-50/40 border border-violet-100">
               <span className="text-violet-700 block font-medium">Story 24h</span>
-              <span className="text-lg font-bold text-slate-900">${profile.rates.story}</span>
+              <span className="text-lg font-bold text-slate-900">{formatCurrency(profile.rates.story)}</span>
               <span className="text-[10px] text-slate-400 block mt-0.5">Enlace directo + mención</span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-violet-50/40 border border-violet-100">
               <span className="text-violet-700 block font-medium">Reel / TikTok</span>
-              <span className="text-lg font-bold text-slate-900">${profile.rates.reel}</span>
+              <span className="text-lg font-bold text-slate-900">{formatCurrency(profile.rates.reel)}</span>
               <span className="text-[10px] text-slate-400 block mt-0.5">Video dinámico de 30-60s</span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-violet-50/40 border border-violet-100">
               <span className="text-violet-700 block font-medium">Post en Feed</span>
-              <span className="text-lg font-bold text-slate-900">${profile.rates.post}</span>
+              <span className="text-lg font-bold text-slate-900">{formatCurrency(profile.rates.post)}</span>
               <span className="text-[10px] text-slate-400 block mt-0.5">Fotografía fija + copy</span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-violet-50/40 border border-violet-100">
               <span className="text-violet-700 block font-medium">Video Dedicado</span>
-              <span className="text-lg font-bold text-slate-900">${profile.rates.videoDedicado}</span>
+              <span className="text-lg font-bold text-slate-900">{formatCurrency(profile.rates.videoDedicado)}</span>
               <span className="text-[10px] text-slate-400 block mt-0.5">Integración completa en canal</span>
             </div>
           </div>

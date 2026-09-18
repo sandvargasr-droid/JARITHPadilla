@@ -6,7 +6,11 @@ export function formatFollowers(value: number): string {
 }
 
 export function formatRate(value: number): string {
-  return value > 0 ? `$${value} USD` : 'A consultar';
+  return value > 0 ? formatCurrency(value) : 'A consultar';
+}
+
+export function formatCurrency(value: number): string {
+  return `Bs ${value.toLocaleString('es-BO', { maximumFractionDigits: 2 })}`;
 }
 
 export function formatRating(rating: number, reviewCount: number): string {

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { InMemoryDatabase } from '../server/db.ts';
 import { createStaticApi } from '../src/services/staticApi.ts';
 
 test('static demo loads the data required by the first page without an HTTP server', async () => {
@@ -110,4 +111,19 @@ test('new demo registrations start with honest Santa Cruz defaults', async () =>
   });
   assert.equal(business.profile?.location, 'Santa Cruz de la Sierra, Bolivia');
   assert.equal(business.profile && 'companyName' in business.profile ? business.profile.rating : -1, 0);
+});
+
+test('escrow messages present every amount in bolivianos', () => {
+  const database = new InMemoryDatabase();
+
+  database.depositEscrow('agr_demo_1', 'user_biz_1');
+  database.releaseEscrow('agr_demo_1', 'user_biz_1');
+
+  const messages = database.getMessagesForConversation('conv_demo_1');
+  const notifications = database.getNotifications('user_inf_1');
+  const visibleCopy = [...messages.map((message) => message.text), ...notifications.map((notification) => notification.message)].join('\n');
+
+  assert.match(visibleCopy, /Bs 350/);
+  assert.match(visibleCopy, /Bs 315/);
+  assert.doesNotMatch(visibleCopy, /USD|\$/);
 });

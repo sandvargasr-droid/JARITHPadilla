@@ -5,7 +5,7 @@ import {
   ShieldCheck,
   FileText,
   Calendar,
-  DollarSign,
+  Coins,
   Info,
   Clock,
   CheckCircle2,
@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { Conversation, Message, User, Agreement } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   currentUser: User;
@@ -187,7 +188,7 @@ export const MessagingView: React.FC<Props> = ({
                   title="Ver fondos en custodia y entregables"
                 >
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Escrow (${activeAgreement.agreedPrice})</span>
+                  <span>Escrow ({formatCurrency(activeAgreement.agreedPrice ?? activeAgreement.agreedBudget)})</span>
                 </button>
               )}
 
@@ -290,8 +291,8 @@ export const MessagingView: React.FC<Props> = ({
                   <div>
                     <span className="text-[10px] text-slate-400 font-medium block">Presupuesto Acordado:</span>
                     <div className="flex items-center gap-1 text-sm font-extrabold text-slate-900">
-                      <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>{activeAgreement.agreedPrice} USD</span>
+                      <Coins className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>{formatCurrency(activeAgreement.agreedPrice ?? activeAgreement.agreedBudget)}</span>
                     </div>
                   </div>
 

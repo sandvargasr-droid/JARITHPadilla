@@ -24,7 +24,6 @@ import { ApplicationsView } from './components/connection/ApplicationsView.js';
 import { MessagingView } from './components/connection/MessagingView.js';
 import { DeliverablesAndEscrowView } from './components/connection/DeliverablesAndEscrowView.js';
 import { RatingsView } from './components/connection/RatingsView.js';
-import { DocumentationModal } from './components/DocumentationModal.js';
 import { Loader2, Sparkles } from 'lucide-react';
 import { getOwnedCampaigns } from './utils/profileDisplay.js';
 
@@ -47,7 +46,6 @@ export default function App() {
 
   // Navigation and UI States
   const [activeTab, setActiveTab] = useState<string>('explore_campaigns');
-  const [showDocsModal, setShowDocsModal] = useState(false);
   const [ratingModalAgreement, setRatingModalAgreement] = useState<Agreement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -323,7 +321,6 @@ export default function App() {
         onNotificationClick={handleNotificationClick}
         onMarkAllRead={handleMarkAllRead}
         onResetDemo={handleResetDemo}
-        onOpenDocs={() => setShowDocsModal(true)}
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
@@ -445,10 +442,6 @@ export default function App() {
 
       </main>
 
-      {/* Official Functional Specification Documentation Modal */}
-      <DocumentationModal isOpen={showDocsModal} onClose={() => setShowDocsModal(false)} />
-
-
       {/* Global Footer */}
       <footer className="mt-auto border-t border-violet-100 bg-white py-6 text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -457,13 +450,6 @@ export default function App() {
             <span>— Plataforma Oficial de Conexión Influencers & Marcas</span>
           </div>
           <div className="flex items-center gap-4 text-slate-500">
-            <button
-              onClick={() => setShowDocsModal(true)}
-              className="hover:text-violet-600 font-medium"
-            >
-              Ver Requisitos Oficiales
-            </button>
-            <span>•</span>
             <button
               onClick={handleResetDemo}
               className="hover:text-violet-600 font-medium"

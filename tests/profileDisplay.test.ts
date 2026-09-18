@@ -22,7 +22,7 @@ test('published follower counts use a compact Spanish label', () => {
 });
 
 test('known rates and ratings preserve their useful values', () => {
-  assert.equal(formatRate(350), '$350 USD');
+  assert.equal(formatRate(350), 'Bs 350');
   assert.equal(formatRating(4.9, 18), '4.9 (18)');
 });
 

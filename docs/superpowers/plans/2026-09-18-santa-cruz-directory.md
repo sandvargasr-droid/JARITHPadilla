@@ -49,7 +49,7 @@ Expected: FAIL porque `src/utils/profileDisplay.ts` todavía no existe.
 
 ```ts
 export function formatRate(value: number) {
-  return value > 0 ? `$${value} USD` : 'A consultar';
+  return value > 0 ? `Bs ${value}` : 'A consultar';
 }
 ```
 

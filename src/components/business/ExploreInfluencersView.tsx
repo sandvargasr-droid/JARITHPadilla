@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Search,
   Filter,
-  DollarSign,
+  Coins,
   Users,
   MapPin,
   Star,
@@ -20,6 +20,7 @@ import {
 import { InfluencerProfile, Campaign } from '../../types.js';
 import {
   canInviteProfile,
+  formatCurrency,
   formatFollowers,
   formatRate,
   formatRating,
@@ -179,7 +180,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
           <div>
             <input
               type="number"
-              placeholder="Tarifa máx. Reel ($ USD)..."
+              placeholder="Tarifa máx. Reel (Bs)..."
               value={maxRate || ''}
               onChange={(e) => setMaxRate(Number(e.target.value))}
               className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-rose-500 text-slate-800"
@@ -396,7 +397,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                       >
                         {myCampaigns.map((c) => (
                           <option key={c.id} value={c.id}>
-                            {c.title} (${c.budget} USD)
+                            {c.title} ({formatCurrency(c.budget)})
                           </option>
                         ))}
                       </select>
@@ -404,10 +405,10 @@ export const ExploreInfluencersView: React.FC<Props> = ({
 
                     <div>
                       <label className="block font-semibold text-slate-700 mb-1">
-                        Presupuesto Ofrecido (USD)
+                        Presupuesto Ofrecido (Bs)
                       </label>
                       <div className="relative">
-                        <DollarSign className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                        <Coins className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                         <input
                           type="number"
                           value={inviteBudget}

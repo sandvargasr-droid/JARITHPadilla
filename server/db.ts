@@ -12,6 +12,7 @@ import {
   AppNotification,
   UserRole,
 } from '../src/types.js';
+import { formatCurrency } from '../src/utils/profileDisplay.js';
 
 import {
   initialUsers,
@@ -470,7 +471,7 @@ export class InMemoryDatabase {
           senderRole: 'business',
           senderName: 'InfluConnect System',
           senderAvatar: '',
-          text: `🤝 ¡Acuerdo generado con éxito para "${app.campaignTitle}"! Presupuesto acordado: $${agreedBudget} USD. La marca debe confirmar el depósito en custodia (escrow) para iniciar la producción.`,
+          text: `🤝 ¡Acuerdo generado con éxito para "${app.campaignTitle}"! Presupuesto acordado: ${formatCurrency(agreedBudget)}. La marca debe confirmar el depósito en custodia (escrow) para iniciar la producción.`,
           timestamp: new Date().toISOString(),
         },
       ];
@@ -539,10 +540,10 @@ export class InMemoryDatabase {
         senderRole: 'business',
         senderName: business.companyName,
         senderAvatar: business.logoUrl,
-        text: `🔒 Fondos de garantía depositados: $${agreement.agreedBudget} USD se encuentran retenidos de forma segura en InfluConnect. ¡El creador puede comenzar a producir el contenido!`,
+        text: `🔒 Fondos de garantía depositados: ${formatCurrency(agreement.agreedBudget)} se encuentran retenidos de forma segura en InfluConnect. ¡El creador puede comenzar a producir el contenido!`,
         timestamp: new Date().toISOString(),
       });
-      conv.lastMessageText = `Depósito de garantía completado: $${agreement.agreedBudget} USD.`;
+      conv.lastMessageText = `Depósito de garantía completado: ${formatCurrency(agreement.agreedBudget)}.`;
       conv.lastMessageTimestamp = new Date().toISOString();
     }
 
@@ -553,7 +554,7 @@ export class InMemoryDatabase {
         id: `notif_${Date.now()}`,
         userId: influencer.userId,
         title: 'Pago depositado en Escrow',
-        message: `${business.companyName} ha depositado $${agreement.agreedBudget} USD en custodia. Puedes comenzar tu entregable con total seguridad.`,
+        message: `${business.companyName} ha depositado ${formatCurrency(agreement.agreedBudget)} en custodia. Puedes comenzar tu entregable con total seguridad.`,
         type: 'pago',
         read: false,
         createdAt: new Date().toISOString(),
@@ -594,7 +595,7 @@ export class InMemoryDatabase {
         senderRole: 'business',
         senderName: 'InfluConnect Escrow',
         senderAvatar: '',
-        text: `🎉 ¡Pago liberado con éxito! Se transfirieron $${agreement.influencerPayout} USD al influencer tras aplicar la comisión del 10% ($${agreement.agreedBudget - agreement.influencerPayout} USD). Se ha habilitado la calificación mutua.`,
+        text: `🎉 ¡Pago liberado con éxito! Se transfirieron ${formatCurrency(agreement.influencerPayout)} al influencer tras aplicar la comisión del 10% (${formatCurrency(agreement.agreedBudget - agreement.influencerPayout)}). Se ha habilitado la calificación mutua.`,
         timestamp: new Date().toISOString(),
       });
       conv.lastMessageText = 'Pago liberado con éxito al creador.';
@@ -608,7 +609,7 @@ export class InMemoryDatabase {
         id: `notif_${Date.now()}`,
         userId: influencer.userId,
         title: '¡Pago liberado!',
-        message: `Se han acreditado $${agreement.influencerPayout} USD en tu saldo por la campaña "${agreement.campaignTitle}". Ya puedes calificar a la marca.`,
+        message: `Se han acreditado ${formatCurrency(agreement.influencerPayout)} en tu saldo por la campaña "${agreement.campaignTitle}". Ya puedes calificar a la marca.`,
         type: 'pago',
         read: false,
         createdAt: new Date().toISOString(),

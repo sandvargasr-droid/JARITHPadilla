@@ -5,7 +5,6 @@ import {
   AlertTriangle,
   Upload,
   ExternalLink,
-  DollarSign,
   FileCheck,
   Clock,
   MessageSquare,
@@ -19,6 +18,7 @@ import {
   Send,
 } from 'lucide-react';
 import { Agreement, Deliverable, User } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   currentUser: User;
@@ -154,14 +154,14 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
               <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">
                 Retenido en Garantía
               </span>
-              <span className="text-lg font-extrabold text-amber-600">${totalRetained} USD</span>
+              <span className="text-lg font-extrabold text-amber-600">{formatCurrency(totalRetained)}</span>
             </div>
             <div className="h-8 w-px bg-slate-200" />
             <div>
               <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">
                 Pagos Liberados
               </span>
-              <span className="text-lg font-extrabold text-emerald-600">${totalReleased} USD</span>
+              <span className="text-lg font-extrabold text-emerald-600">{formatCurrency(totalReleased)}</span>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
                       : 'bg-slate-200 text-slate-700'
                   }`}
                 >
-                  ${a.agreedPrice}
+                  {formatCurrency(a.agreedPrice ?? a.agreedBudget)}
                 </span>
               </button>
             );
@@ -355,7 +355,7 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">Monto Custodiado:</span>
                   <span className="text-base font-extrabold text-slate-900">
-                    ${selectedAgreement.agreedPrice} USD
+                    {formatCurrency(selectedAgreement.agreedPrice ?? selectedAgreement.agreedBudget)}
                   </span>
                 </div>
 
@@ -394,7 +394,7 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
                   className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-sm"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Depositar Fondos en Garantía (${selectedAgreement.agreedPrice} USD)</span>
+                  <span>Depositar Fondos en Garantía ({formatCurrency(selectedAgreement.agreedPrice ?? selectedAgreement.agreedBudget)})</span>
                 </button>
               )}
 
@@ -580,7 +580,7 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
                     }`}
                   >
                     <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-emerald-600" />
-                    <span>Aprobar y Liberar Pago (${selectedAgreement.agreedPrice} USD)</span>
+                    <span>Aprobar y Liberar Pago ({formatCurrency(selectedAgreement.agreedPrice ?? selectedAgreement.agreedBudget)})</span>
                   </button>
 
                   <button
@@ -616,7 +616,7 @@ export const DeliverablesAndEscrowView: React.FC<Props> = ({
               </div>
 
               <div className="p-3 bg-violet-50/70 border border-violet-100 rounded-xl text-[11px] text-violet-950">
-                🛡️ <strong>Al aprobar el entregable:</strong> El estado de la campaña cambiará a completado y el dinero retenido en Escrow (${selectedAgreement.agreedPrice} USD) se liberará inmediatamente al creador.
+                🛡️ <strong>Al aprobar el entregable:</strong> El estado de la campaña cambiará a completado y el dinero retenido en Escrow ({formatCurrency(selectedAgreement.agreedPrice ?? selectedAgreement.agreedBudget)}) se liberará inmediatamente al creador.
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">

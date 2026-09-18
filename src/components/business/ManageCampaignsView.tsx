@@ -3,7 +3,6 @@ import {
   PlusCircle,
   Edit2,
   Lock,
-  DollarSign,
   Calendar,
   Users,
   CheckCircle,
@@ -15,6 +14,7 @@ import {
   SendHorizontal,
 } from 'lucide-react';
 import { Campaign, CoverageType, CampaignStatus } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   campaigns: Campaign[];
@@ -197,7 +197,7 @@ export const ManageCampaignsView: React.FC<Props> = ({
                     </span>
 
                     <span className="text-xs font-bold text-slate-900 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
-                      ${c.budget} USD
+                      {formatCurrency(c.budget)}
                     </span>
                   </div>
 
@@ -350,7 +350,7 @@ export const ManageCampaignsView: React.FC<Props> = ({
 
                 <div>
                   <label className="block font-semibold text-slate-700 mb-1">
-                    Presupuesto por Creador (USD)
+                    Presupuesto por Creador (Bs)
                   </label>
                   <input
                     type="number"

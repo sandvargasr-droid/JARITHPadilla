@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Search,
   Filter,
-  DollarSign,
+  Coins,
   Calendar,
   Users,
   MapPin,
@@ -18,6 +18,7 @@ import {
   Info,
 } from 'lucide-react';
 import { Campaign, ApplicationOrInvitation, BusinessProfile } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   campaigns: Campaign[];
@@ -162,7 +163,7 @@ export const ExploreCampaignsView: React.FC<Props> = ({
           <div>
             <input
               type="number"
-              placeholder="Presupuesto máx. USD..."
+              placeholder="Presupuesto máx. (Bs)..."
               value={maxBudget || ''}
               onChange={(e) => setMaxBudget(Number(e.target.value))}
               className="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-violet-500 text-slate-800"
@@ -292,9 +293,7 @@ export const ExploreCampaignsView: React.FC<Props> = ({
                   <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                     <div>
                       <span className="text-[10px] text-slate-400 block font-medium">Presupuesto</span>
-                      <span className="text-base font-extrabold text-slate-900">
-                        ${c.budget} <span className="text-[10px] font-normal text-slate-400">USD</span>
-                      </span>
+                      <span className="text-base font-extrabold text-slate-900">{formatCurrency(c.budget)}</span>
                     </div>
 
                     {isApplied ? (
@@ -415,10 +414,10 @@ export const ExploreCampaignsView: React.FC<Props> = ({
 
                 <div>
                   <label className="block font-semibold text-slate-700 mb-1">
-                    Propuesta económica / Tarifa (USD)
+                    Propuesta económica / Tarifa (Bs)
                   </label>
                   <div className="relative">
-                    <DollarSign className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                    <Coins className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                     <input
                       type="number"
                       value={proposedBudget}
@@ -428,7 +427,7 @@ export const ExploreCampaignsView: React.FC<Props> = ({
                     />
                   </div>
                   <span className="text-[10px] text-slate-400 mt-1 block">
-                    Presupuesto fijado por la marca: ${selectedCampaign.budget} USD (puedes negociar).
+                    Presupuesto fijado por la marca: {formatCurrency(selectedCampaign.budget)} (puedes negociar).
                   </span>
                 </div>
 

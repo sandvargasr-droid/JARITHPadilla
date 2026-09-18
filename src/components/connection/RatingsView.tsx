@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { Rating, Agreement, User } from '../../types.js';
+import { formatCurrency } from '../../utils/profileDisplay.js';
 
 interface Props {
   currentUser: User;
@@ -163,7 +164,7 @@ export const RatingsView: React.FC<Props> = ({
                   <div>
                     <h4 className="font-bold text-slate-900 line-clamp-1">{a.campaignTitle}</h4>
                     <span className="text-slate-500 text-[11px]">
-                      Con: <strong>{otherParty}</strong> (${a.agreedPrice} USD)
+                      Con: <strong>{otherParty}</strong> ({formatCurrency(a.agreedPrice ?? a.agreedBudget)})
                     </span>
                   </div>
 
