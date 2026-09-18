@@ -45,7 +45,7 @@ export const ManageCampaignsView: React.FC<Props> = ({
     requiredNetworks: ['TikTok', 'Instagram'] as ('TikTok' | 'Instagram' | 'Facebook' | 'YouTube')[],
     contentType: '1 Reel + 2 Stories',
     minFollowers: 30000,
-    location: 'Madrid / Remoto',
+    location: 'Santa Cruz de la Sierra / Remoto',
     coverage: 'ambas' as CoverageType,
     deadline: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
     influencersNeeded: 2,

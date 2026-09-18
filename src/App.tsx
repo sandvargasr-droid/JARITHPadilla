@@ -26,6 +26,7 @@ import { DeliverablesAndEscrowView } from './components/connection/DeliverablesA
 import { RatingsView } from './components/connection/RatingsView.js';
 import { DocumentationModal } from './components/DocumentationModal.js';
 import { Loader2, Sparkles } from 'lucide-react';
+import { getOwnedCampaigns } from './utils/profileDisplay.js';
 
 export default function App() {
   // Core Data States
@@ -33,6 +34,7 @@ export default function App() {
   const [currentProfile, setCurrentProfile] = useState<InfluencerProfile | BusinessProfile | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [allInfluencers, setAllInfluencers] = useState<InfluencerProfile[]>([]);
+  const [allBusinesses, setAllBusinesses] = useState<BusinessProfile[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [applications, setApplications] = useState<ApplicationOrInvitation[]>([]);
   const [agreements, setAgreements] = useState<Agreement[]>([]);
@@ -56,6 +58,7 @@ export default function App() {
         meRes,
         usersRes,
         influencersRes,
+        businessesRes,
         campaignsRes,
         appsRes,
         agreementsRes,
@@ -67,6 +70,7 @@ export default function App() {
         api.getCurrentUser(),
         api.getAllUsers(),
         api.getInfluencerProfiles(),
+        api.getBusinesses(),
         api.getCampaigns(),
         api.getApplications(),
         api.getAgreements(),
@@ -80,6 +84,7 @@ export default function App() {
       setCurrentProfile(meRes.profile);
       setAllUsers(usersRes.users);
       setAllInfluencers(influencersRes.influencers);
+      setAllBusinesses(businessesRes);
       setCampaigns(campaignsRes);
       setApplications(appsRes);
       setAgreements(agreementsRes.agreements);
@@ -291,6 +296,10 @@ export default function App() {
   }
 
   const isInfluencer = currentUser.role === 'influencer';
+  const currentBusinessProfile = !isInfluencer && currentProfile && 'companyName' in currentProfile
+    ? currentProfile as BusinessProfile
+    : null;
+  const ownedCampaigns = getOwnedCampaigns(campaigns, currentBusinessProfile);
 
   // Badges calculation
   const pendingAppsCount = applications.filter((a) => {
@@ -336,6 +345,7 @@ export default function App() {
             {activeTab === 'explore_campaigns' && (
               <ExploreCampaignsView
                 campaigns={campaigns}
+                localBusinesses={allBusinesses.filter((business) => business.isReferenceProfile)}
                 existingApplications={applications}
                 onApply={handleApplyCampaign}
               />
@@ -356,14 +366,14 @@ export default function App() {
             {activeTab === 'explore_influencers' && (
               <ExploreInfluencersView
                 influencers={allInfluencers}
-                myCampaigns={campaigns.filter((c) => c.businessId === currentUser.id)}
+                myCampaigns={ownedCampaigns}
                 onInviteInfluencer={handleInviteInfluencer}
               />
             )}
 
             {activeTab === 'manage_campaigns' && (
               <ManageCampaignsView
-                campaigns={campaigns.filter((c) => c.businessId === currentUser.id)}
+                campaigns={ownedCampaigns}
                 onCreateCampaign={handleCreateCampaign}
                 onUpdateCampaign={handleUpdateCampaign}
                 onCloseCampaign={handleCloseCampaign}

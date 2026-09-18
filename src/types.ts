@@ -35,15 +35,21 @@ export interface VideoPortfolioItem {
   isFeatured: boolean;
 }
 
-export interface InfluencerProfile {
+export interface PublicProfileMetadata {
+  isReferenceProfile?: boolean;
+  sourceUrl?: string;
+  dataUpdatedAt?: string;
+}
+
+export interface InfluencerProfile extends PublicProfileMetadata {
   id: string;
   userId: string;
   fullName: string;
   handle: string;
   avatarUrl: string;
   bio: string;
-  age: number;
-  gender: 'femenino' | 'masculino' | 'no_binario' | 'otro';
+  age?: number;
+  gender?: 'femenino' | 'masculino' | 'no_binario' | 'otro';
   rating: number;
   reviewCount: number;
   niche: string;
@@ -55,7 +61,7 @@ export interface InfluencerProfile {
   verified: boolean;
 }
 
-export interface BusinessProfile {
+export interface BusinessProfile extends PublicProfileMetadata {
   id: string;
   userId: string;
   companyName: string;
@@ -96,6 +102,7 @@ export interface Campaign {
   applicantsCount: number;
   status: CampaignStatus;
   createdAt: string;
+  isDemo?: boolean;
 }
 
 export interface ApplicationOrInvitation {

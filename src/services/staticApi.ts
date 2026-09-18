@@ -32,7 +32,14 @@ export function createStaticApi(
   storage: StorageLike | null = browserStorage(),
   database = new InMemoryDatabase(),
 ) {
-  let currentUserId = storage?.getItem(USER_STORAGE_KEY) || DEFAULT_USER_ID;
+  const savedUserId = storage?.getItem(USER_STORAGE_KEY);
+  let currentUserId = savedUserId && database.getUserById(savedUserId)
+    ? savedUserId
+    : DEFAULT_USER_ID;
+
+  if (savedUserId && savedUserId !== currentUserId) {
+    storage?.setItem(USER_STORAGE_KEY, currentUserId);
+  }
 
   const getUser = () => {
     const user = database.getUserById(currentUserId);

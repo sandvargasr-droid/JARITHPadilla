@@ -161,8 +161,8 @@ export const DocumentationModal: React.FC<Props> = ({ isOpen, onClose }) => {
               Usa el selector <strong>"Cambiar Usuario Demo"</strong> en la barra superior:
             </p>
             <ul className="list-disc list-inside space-y-1 text-xs text-slate-700">
-              <li><strong>Modo Influencer:</strong> Prueba con <em>Valeria Ríos</em> (Moda) o <em>Sofía Chen</em> (Foodie). Puedes editar tu perfil, explorar campañas, postularte, chatear y subir entregables.</li>
-              <li><strong>Modo Marca:</strong> Prueba con <em>Aura Eco-Fashion</em> o <em>Gourmet Bistro</em>. Puedes crear campañas, invitar creadores, aceptar postulaciones, depositar en Escrow, aprobar entregas y calificar.</li>
+              <li><strong>Modo Influencer:</strong> Prueba con <em>Creador Demo Santa Cruz</em>. Puedes editar tu perfil, explorar campañas, postularte, chatear y subir entregables.</li>
+              <li><strong>Modo Marca:</strong> Prueba con <em>Empresa Demo Santa Cruz</em>. Puedes crear campañas, invitar al creador demo, aceptar postulaciones, depositar en Escrow, aprobar entregas y calificar.</li>
               <li><strong>Reiniciar Demo:</strong> Si deseas restablecer los datos de prueba a su estado original, pulsa el botón de reinicio en cualquier momento.</li>
             </ul>
           </div>

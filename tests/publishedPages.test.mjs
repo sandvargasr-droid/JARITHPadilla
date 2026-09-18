@@ -13,5 +13,7 @@ test('repository root contains the compiled site expected by branch-based GitHub
   assert.ok(existsSync(bundleUrl), 'the JavaScript bundle referenced by the published HTML must exist');
 
   const bundle = readFileSync(bundleUrl, 'utf8');
+  assert.equal(bundle.includes('carlitoselfoodie'), true, 'published bundle must include the Santa Cruz creator directory');
+  assert.equal(bundle.includes('Empresa Demo Santa Cruz'), true, 'published bundle must label demo transactions');
   assert.equal(bundle.includes('/api/auth/me'), false, 'published bundle must use the browser demo API');
 });

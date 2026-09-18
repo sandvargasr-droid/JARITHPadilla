@@ -14,5 +14,7 @@ test('GitHub Pages artifact uses bundled assets and the browser demo API', () =>
 
   const bundle = readFileSync(bundleUrl, 'utf8');
   assert.equal(bundle.includes('user_inf_1'), true, 'the static demo data must be bundled for GitHub Pages');
+  assert.equal(bundle.includes('carlitoselfoodie'), true, 'the Santa Cruz creator directory must be bundled');
+  assert.equal(bundle.includes('Empresa Demo Santa Cruz'), true, 'demo transactions must remain clearly separated');
   assert.equal(bundle.includes('/api/auth/me'), false, 'the Pages bundle must not require the Express API');
 });

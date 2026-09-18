@@ -13,11 +13,15 @@ import {
   X,
   Clock,
   AlertCircle,
+  Building2,
+  ExternalLink,
+  Info,
 } from 'lucide-react';
-import { Campaign, ApplicationOrInvitation } from '../../types.js';
+import { Campaign, ApplicationOrInvitation, BusinessProfile } from '../../types.js';
 
 interface Props {
   campaigns: Campaign[];
+  localBusinesses: BusinessProfile[];
   existingApplications: ApplicationOrInvitation[];
   onApply: (data: { campaignId: string; pitchMessage: string; agreedBudget: number }) => Promise<void>;
   onSelectCampaignForDetails?: (campaign: Campaign) => void;
@@ -25,6 +29,7 @@ interface Props {
 
 export const ExploreCampaignsView: React.FC<Props> = ({
   campaigns,
+  localBusinesses,
   existingApplications,
   onApply,
 }) => {
@@ -38,14 +43,7 @@ export const ExploreCampaignsView: React.FC<Props> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [applySuccessMessage, setApplySuccessMessage] = useState('');
 
-  const niches = [
-    'Todos',
-    'Moda y Estilo',
-    'Gastronomía y Cafés',
-    'Fitness y Salud',
-    'Tecnología y Gadgets',
-    'Belleza y Skincare',
-  ];
+  const niches = ['Todos', ...Array.from(new Set(campaigns.map((campaign) => campaign.niche))).sort()];
 
   const networks = ['Todas', 'TikTok', 'Instagram', 'YouTube', 'Facebook'];
 
@@ -111,8 +109,13 @@ export const ExploreCampaignsView: React.FC<Props> = ({
             Explorar Campañas Disponibles
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-            Descubre colaboraciones abiertas publicadas por marcas y empresas. Postúlate con tu tarifa propuesta y formaliza el acuerdo mediante nuestro sistema seguro de escrow.
+            Prueba el flujo completo con campañas simuladas de Santa Cruz. Ninguna tarjeta representa una oferta comercial real.
           </p>
+        </div>
+
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-[11px] text-amber-900">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>Entorno demostrativo: presupuestos, acuerdos, mensajes, reseñas y pagos son completamente ficticios.</span>
         </div>
 
         {/* Filter Controls Bar */}
@@ -234,6 +237,12 @@ export const ExploreCampaignsView: React.FC<Props> = ({
                       </span>
                     </div>
 
+                    {c.isDemo && (
+                      <span className="mb-2 inline-flex rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-700">
+                        Campaña demo · no oficial
+                      </span>
+                    )}
+
                     {/* Campaign Title & Nicho */}
                     <h3 className="text-sm font-bold text-slate-900 font-display line-clamp-2 mb-2">
                       {c.title}
@@ -313,6 +322,42 @@ export const ExploreCampaignsView: React.FC<Props> = ({
           </div>
         )}
       </div>
+
+      <section className="rounded-2xl border border-violet-100 bg-white p-6 shadow-xs sm:p-8">
+        <div className="mb-5 flex items-start gap-3">
+          <div className="rounded-xl bg-violet-100 p-2 text-violet-700">
+            <Building2 className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Empresas locales de Santa Cruz</h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Directorio referencial con enlaces a sitios oficiales. Su presencia aquí no implica afiliación ni campañas activas.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {localBusinesses.map((business) => (
+            <a
+              key={business.id}
+              href={business.sourceUrl || business.website}
+              target="_blank"
+              rel="noreferrer"
+              className="group flex items-start gap-3 rounded-xl border border-slate-200 p-3 transition hover:border-violet-300 hover:bg-violet-50/40"
+            >
+              <img src={business.logoUrl} alt={business.companyName} className="h-11 w-11 shrink-0 rounded-xl object-cover" />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h3 className="truncate text-xs font-bold text-slate-900">{business.companyName}</h3>
+                  <ExternalLink className="h-3 w-3 shrink-0 text-slate-400 group-hover:text-violet-600" />
+                </div>
+                <p className="text-[10px] font-semibold text-violet-700">{business.category}</p>
+                <p className="mt-1 line-clamp-2 text-[10px] leading-relaxed text-slate-500">{business.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
       {/* Application Modal */}
       {selectedCampaign && (

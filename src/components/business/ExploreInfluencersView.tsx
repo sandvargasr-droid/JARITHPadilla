@@ -14,8 +14,16 @@ import {
   ChevronRight,
   X,
   CheckCircle2,
+  ExternalLink,
+  Info,
 } from 'lucide-react';
 import { InfluencerProfile, Campaign } from '../../types.js';
+import {
+  canInviteProfile,
+  formatFollowers,
+  formatRate,
+  formatRating,
+} from '../../utils/profileDisplay.js';
 
 interface Props {
   influencers: InfluencerProfile[];
@@ -48,15 +56,9 @@ export const ExploreInfluencersView: React.FC<Props> = ({
   const [inviteSuccessMsg, setInviteSuccessMsg] = useState('');
   const [viewingProfileModal, setViewingProfileModal] = useState<InfluencerProfile | null>(null);
 
-  const niches = [
-    'Todos',
-    'Moda y Estilo',
-    'Gastronomía y Cafés',
-    'Fitness y Salud',
-    'Tecnología y Gadgets',
-  ];
+  const niches = ['Todos', ...Array.from(new Set(influencers.map((inf) => inf.niche))).sort()];
 
-  const locations = ['Todas', 'Madrid', 'Barcelona', 'Valencia'];
+  const locations = ['Todas', 'Santa Cruz de la Sierra'];
 
   const filtered = influencers.filter((inf) => {
     if (selectedNiche !== 'Todos' && !inf.niche.toLowerCase().includes(selectedNiche.toLowerCase())) {
@@ -65,7 +67,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
     if (selectedLocation !== 'Todas' && !inf.location.toLowerCase().includes(selectedLocation.toLowerCase())) {
       return false;
     }
-    if (maxRate > 0 && inf.rates.reel > maxRate) {
+    if (maxRate > 0 && (inf.rates.reel <= 0 || inf.rates.reel > maxRate)) {
       return false;
     }
     if (searchQuery.trim()) {
@@ -81,6 +83,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
   });
 
   const handleOpenInvite = (inf: InfluencerProfile) => {
+    if (!canInviteProfile(inf)) return;
     setSelectedInfluencerForInvite(inf);
     const camp = myCampaigns.find((c) => c.id === selectedCampaignId) || myCampaigns[0];
     const initialBudget = camp ? camp.budget : inf.rates.reel;
@@ -123,8 +126,13 @@ export const ExploreInfluencersView: React.FC<Props> = ({
             Descubrir Creadores e Influencers
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-            Explora creadores de contenido verificados, revisa sus métricas reales en TikTok, Instagram y YouTube, y envíales una invitación directa para tus campañas.
+            Explora creadores de Santa Cruz con identidad y datos públicos referenciales. Las tarifas no publicadas se muestran como “A consultar”.
           </p>
+        </div>
+
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2.5 text-[11px] text-sky-900">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>Los perfiles marcados como públicos no están afiliados a InfluConnect y no pueden recibir invitaciones desde esta demostración.</span>
         </div>
 
         {/* Filter Bar */}
@@ -203,12 +211,6 @@ export const ExploreInfluencersView: React.FC<Props> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((inf) => {
-            const totalFollowers =
-              (inf.socialFollowers.tiktok || 0) +
-              (inf.socialFollowers.instagram || 0) +
-              (inf.socialFollowers.facebook || 0) +
-              (inf.socialFollowers.youtube || 0);
-
             return (
               <div
                 key={inf.id}
@@ -232,11 +234,16 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                         )}
                       </div>
                       <span className="text-xs text-slate-400 block truncate">{inf.handle}</span>
-                      <div className="flex items-center gap-1 mt-0.5 text-xs text-slate-600">
-                        <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                        <span className="font-bold text-slate-900">{inf.rating}</span>
-                        <span className="text-[10px] text-slate-400">({inf.reviewCount})</span>
-                      </div>
+                      {inf.isReferenceProfile ? (
+                        <span className="mt-1 inline-flex rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-sky-700">
+                          Perfil público
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-1 mt-0.5 text-xs text-slate-600">
+                          <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                          <span className="font-bold text-slate-900">{formatRating(inf.rating, inf.reviewCount)}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -249,13 +256,13 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                     <div>
                       <span className="text-slate-400 block text-[10px]">TikTok:</span>
                       <span className="font-bold text-slate-800">
-                        {inf.socialFollowers.tiktok.toLocaleString()}
+                        {formatFollowers(inf.socialFollowers.tiktok)}
                       </span>
                     </div>
                     <div>
                       <span className="text-slate-400 block text-[10px]">Instagram:</span>
                       <span className="font-bold text-slate-800">
-                        {inf.socialFollowers.instagram.toLocaleString()}
+                        {formatFollowers(inf.socialFollowers.instagram)}
                       </span>
                     </div>
                   </div>
@@ -263,7 +270,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                   {/* Rates Snapshot */}
                   <div className="flex items-center justify-between text-[11px] text-slate-500 mb-4 px-1">
                     <span>Tarifa Reel:</span>
-                    <span className="font-extrabold text-slate-900">${inf.rates.reel} USD</span>
+                    <span className="font-extrabold text-slate-900">{formatRate(inf.rates.reel)}</span>
                   </div>
 
                   {/* Portfolio highlight preview */}
@@ -300,16 +307,28 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                     onClick={() => setViewingProfileModal(inf)}
                     className="text-slate-600 hover:text-slate-900 font-semibold p-1"
                   >
-                    Ver Portafolio
+                    Ver detalles
                   </button>
 
-                  <button
-                    onClick={() => handleOpenInvite(inf)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700 transition-colors shadow-xs"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Invitar a Campaña</span>
-                  </button>
+                  {canInviteProfile(inf) ? (
+                    <button
+                      onClick={() => handleOpenInvite(inf)}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 text-white font-bold hover:bg-rose-700 transition-colors shadow-xs"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Invitar a Campaña</span>
+                    </button>
+                  ) : (
+                    <a
+                      href={inf.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 font-bold text-sky-700 hover:bg-sky-100"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Ver fuente
+                    </a>
+                  )}
                 </div>
               </div>
             );
@@ -398,7 +417,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                         />
                       </div>
                       <span className="text-[10px] text-slate-400 mt-1 block">
-                        Tarifa base del creador para Reels: ${selectedInfluencerForInvite.rates.reel} USD.
+                        Tarifa base del creador para Reels: {formatRate(selectedInfluencerForInvite.rates.reel)}.
                       </span>
                     </div>
 
@@ -477,30 +496,41 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                 {viewingProfileModal.bio}
               </p>
 
+              {viewingProfileModal.isReferenceProfile && (
+                <div className="flex flex-col gap-2 rounded-xl border border-sky-200 bg-sky-50 p-3 text-[11px] text-sky-900 sm:flex-row sm:items-center sm:justify-between">
+                  <span>
+                    Datos públicos referenciales, actualizados el {viewingProfileModal.dataUpdatedAt}. Sin afiliación oficial.
+                  </span>
+                  <a href={viewingProfileModal.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-bold text-sky-700">
+                    Abrir fuente <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              )}
+
               {/* Rates */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="p-3 bg-violet-50/50 rounded-xl border border-violet-100">
                   <span className="text-slate-400 block text-[10px]">Story</span>
-                  <span className="font-bold text-slate-900">${viewingProfileModal.rates.story} USD</span>
+                  <span className="font-bold text-slate-900">{formatRate(viewingProfileModal.rates.story)}</span>
                 </div>
                 <div className="p-3 bg-violet-50/50 rounded-xl border border-violet-100">
                   <span className="text-slate-400 block text-[10px]">Reel / TikTok</span>
-                  <span className="font-bold text-slate-900">${viewingProfileModal.rates.reel} USD</span>
+                  <span className="font-bold text-slate-900">{formatRate(viewingProfileModal.rates.reel)}</span>
                 </div>
                 <div className="p-3 bg-violet-50/50 rounded-xl border border-violet-100">
                   <span className="text-slate-400 block text-[10px]">Post en Feed</span>
-                  <span className="font-bold text-slate-900">${viewingProfileModal.rates.post} USD</span>
+                  <span className="font-bold text-slate-900">{formatRate(viewingProfileModal.rates.post)}</span>
                 </div>
                 <div className="p-3 bg-violet-50/50 rounded-xl border border-violet-100">
                   <span className="text-slate-400 block text-[10px]">Video Dedicado</span>
                   <span className="font-bold text-slate-900">
-                    ${viewingProfileModal.rates.videoDedicado} USD
+                    {formatRate(viewingProfileModal.rates.videoDedicado)}
                   </span>
                 </div>
               </div>
 
               {/* Portfolio */}
-              <div>
+              {viewingProfileModal.portfolio.length > 0 && <div>
                 <h4 className="font-bold text-slate-900 text-sm mb-3">Galería de Contenidos Previos</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {viewingProfileModal.portfolio.map((v) => (
@@ -521,7 +551,7 @@ export const ExploreInfluencersView: React.FC<Props> = ({
                     </div>
                   ))}
                 </div>
-              </div>
+              </div>}
             </div>
 
             <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end gap-2">
@@ -531,16 +561,23 @@ export const ExploreInfluencersView: React.FC<Props> = ({
               >
                 Cerrar
               </button>
-              <button
-                onClick={() => {
-                  setViewingProfileModal(null);
-                  handleOpenInvite(viewingProfileModal);
-                }}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 shadow-sm"
-              >
-                <Send className="w-3.5 h-3.5" />
-                Invitar a Campaña
-              </button>
+              {canInviteProfile(viewingProfileModal) ? (
+                <button
+                  onClick={() => {
+                    setViewingProfileModal(null);
+                    handleOpenInvite(viewingProfileModal);
+                  }}
+                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 shadow-sm"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  Invitar a Campaña
+                </button>
+              ) : (
+                <a href={viewingProfileModal.sourceUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-xl bg-sky-600 px-5 py-2 text-xs font-bold text-white hover:bg-sky-700">
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Ver perfil público
+                </a>
+              )}
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { db } from './db.js';
 
 export const apiRouter = Router();
 
-// Middleware to extract simulated session from headers or default to Valeria (influencer) or Gourmet Bistro (business)
+// Middleware to extract the simulated session or fall back to the Santa Cruz demo creator.
 export function getAuthenticatedUser(req: Request) {
   const userId = req.headers['x-user-id'] as string;
   if (userId) {
